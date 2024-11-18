@@ -1,29 +1,40 @@
 # Code Challenge
 
-You are tasked with creating a simple Ruby application that simulates a basic API for managing a collection of books. The API should allow you to perform the following operations:
+You are tasked with creating a simple Ruby application that simulates a basic API for managing a collection of books.
 
-1. Create a new book with a title, author, and publication year.
-2. Retrieve a list of all books.
-3. Retrieve a specific book by its ID.
-4. Update a book's information (title, author, publication year).
-5. Delete a book by its ID.
+## Model design:
+- `title` (string, required)
+- `author` (string, required)
+- `publication_date` (datetime, required)
+- `rating` (integer, optional, default `0` - range `0 to 5`)
+- `status` (string, optional, enum with values: `:available`, `:checked_out`, `:reserved`; default: `available`)
+
+## Books Management api:
+- Create a new book: with parameters title, author, and publication_date.
+- List Books: Sort books by rating (high first) and then by publication date (soonest first).
+- Update Book: Allows updating of status, and rating.
+- Delete Book: Permanently removes a book from the collection.
+- Find Book by ID: Retrieve detailed information about a specific book by its ID.
+
+## Background Job (Bonus points):
+### Status Change Notification
+- When the status of a book is changed (e.g., from available to checked_out), immediately log a notification to the console, informing them about the status update.
+  example: `Book status changed: 'Sample Book' is now 'checked_out'.`
+- Use a background job (with ActiveJob and Sidekiq or Resque) to handle email sending asynchronously.
+
+## Unit Tests:
+Write unit tests for all models, controllers, and background jobs (if apply). Ensure tests for edge cases:
+- Book creation with missing required fields.
+- Book creation with a published_date set in the future.
+- Status transitions (e.g., available → checked_out).
+- Sorting by rating and published_date.
+- Background job enqueuing (if apply).
 
 ## Requirements
-
-- Implement the API using Ruby (sinatra or rails).
-- Use an in-memory data structure (like an array or hash) to store the book records.
-- Ensure that the API handles errors gracefully (e.g., trying to retrieve or delete a book that does not exist).
-- Write unit tests for your API endpoints.
+- For storing the data you can use either an in-memory data structure (like an array or hash) or a loca DB.
 
 ## Constraints
-
-- The challenge should be completed in less than 30 minutes.
+- The challenge should be completed in 30-40 minutes.
 - You may use any Ruby version that you are comfortable with.
 - Clone and commit directly to main (DO NOT FORK).
 - AI tools are NOT allowed (copilot, chatgpt, etc).
-
-## External Resources
-
-Sinatra Documentation: For building the API.
-RSpec Documentation: For writing unit tests.
-Postman: For testing your API endpoints.
